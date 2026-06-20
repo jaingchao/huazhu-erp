@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>华住进销存ERP · 第29版 · 同比异常+搜索跳转</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
     </script>
     <style>
         :root {
@@ -903,13 +903,11 @@
         <div class="sidebar-footer">v29 · 同比异常+搜索<br>数据存于本地浏览器</div>
     </div>
     <div class="main-content">
-        <!-- ===== 仪表盘 ===== -->
         <div class="page active" id="page-dashboard">
             <div class="page-header"><h2>📊 数据仪表盘</h2>
                 <div class="month-nav">
                     <span class="month-badge" id="monthBadge">📅 2026年6月</span>
                     <button class="btn btn-sm btn-primary" onclick="checkMonthRollover()">🔄 检查月份</button>
-                    <!-- 搜索框 -->
                     <div class="search-wrap" id="searchWrap">
                         <span class="icon">🔍</span>
                         <input id="searchInput" placeholder="搜索产品..." oninput="handleSearch(this.value)" onfocus="handleSearch(this.value)">
@@ -918,24 +916,15 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 异常波动报警 -->
             <div id="alertBannerContainer"></div>
-
-            <!-- 月度同比异常 -->
             <div id="yoyAlertContainer"></div>
-
-            <!-- 自动采购建议 -->
             <div id="purchaseContainer"></div>
-
-            <!-- 快捷录入 -->
             <div class="quick-input-wrap">
                 <input id="quickInput" placeholder="例如：全季6.5盎司 入库 50  或  汉庭9盎司 出库 30" onkeydown="if(event.key==='Enter')quickBatch()">
                 <button class="btn btn-primary btn-sm" onclick="quickBatch()">⏎ 执行</button>
                 <span class="hint">支持：产品名/规格/编码 + 入库/出库 + 数量</span>
             </div>
             <div id="quickResult" class="quick-result"></div>
-
             <div class="dashboard-cards" id="stats"></div>
             <div class="chart-grid">
                 <div class="chart-box"><h3>📈 出入库趋势（1-31号）</h3><div class="chart-wrap"><canvas id="dailyChart"></canvas></div></div>
@@ -952,21 +941,18 @@
                 <button class="btn btn-blue" onclick="document.getElementById('importOutFile').click()">📥 导入出库Excel</button>
             </div>
         </div>
-        <!-- ===== 入库管理 ===== -->
         <div class="page" id="page-inpage">
             <div class="page-header"><h2>📥 入库管理</h2><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="exportInExcel()">📤 导出入库表</button></div></div>
             <div class="table-wrap" style="max-height:65vh"><table><thead><tr><th>产品</th><th>规格</th><th>编码</th><th>盘点</th><th>安全线</th><script>
                         for (let i = 1; i <= 31; i++) document.write(`<th>${i}日</th>`);
                     </script><th>月汇总</th><th>操作</th></tr></thead><tbody id="inTbody"></tbody></table></div>
         </div>
-        <!-- ===== 出库管理 ===== -->
         <div class="page" id="page-outpage">
             <div class="page-header"><h2>📤 出库管理</h2><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="exportOutExcel()">📤 导出出库表</button></div></div>
             <div class="table-wrap" style="max-height:65vh"><table><thead><tr><th>产品</th><th>规格</th><th>编码</th><script>
                         for (let i = 1; i <= 31; i++) document.write(`<th>${i}日</th>`);
                     </script><th>月汇总</th><th>发货天</th><th>日均</th><th>实时库存</th><th>可发天</th><th>状态</th><th>操作</th></tr></thead><tbody id="outTbody"></tbody></table></div>
         </div>
-        <!-- ===== 库存总览 ===== -->
         <div class="page" id="page-stockpage">
             <div class="page-header"><h2>📋 库存总览</h2><span style="font-size:.78em;color:var(--text2)">按库存从少到多排列 | 点击安全库存值可直接编辑</span></div>
             <div class="view-tabs">
@@ -976,7 +962,6 @@
             <div id="stockCardsView"><div class="stock-cards-wall" id="stockCardsWall"></div></div>
             <div id="stockTableView" class="hidden"><div class="table-wrap" style="max-height:65vh"><table><thead><tr><th>产品</th><th>规格</th><th>编码</th><th>盘点</th><th>实时库存</th><th>安全库存</th><th>可发天</th><th>日均</th><th>状态</th></tr></thead><tbody id="stockTbody"></tbody></table></div></div>
         </div>
-        <!-- ===== 数据分析 ===== -->
         <div class="page" id="page-chartpage">
             <div class="page-header"><h2>📈 数据分析</h2></div>
             <div class="chart-grid">
@@ -984,7 +969,6 @@
                 <div class="chart-box"><h3>📊 单品每日出入库柱状图</h3><div class="chart-wrap"><canvas id="singleBarChart"></canvas></div></div>
             </div>
         </div>
-        <!-- ===== 历史记录 ===== -->
         <div class="page" id="page-historypage">
             <div class="page-header"><h2>📅 历史记录</h2></div>
             <div class="history-list" id="historyList"></div>
@@ -995,7 +979,6 @@
         </div>
     </div>
 
-    <!-- ===== 模态框 ===== -->
     <div class="modal-overlay" id="addProductModal" style="display:none"><div class="modal-box"><h3 id="modalTitle">➕ 新增产品</h3><input id="mName" placeholder="产品名称"><input id="mSpec" placeholder="产品规格"><input id="mCode" placeholder="产品编码"><input id="mSafeStock" type="number" placeholder="安全库存预警线" value="10"><input id="mInitStock" type="number" placeholder="盘点库存" value="0"><input type="hidden" id="mEditId"><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeAddProduct()">取消</button><button class="btn btn-primary" onclick="saveProduct()">💾 保存</button></div></div></div>
     <div class="modal-overlay" id="carryoverModal" style="display:none"><div class="modal-box"><h3>🔄 月度结转</h3><p id="carryoverMsg" style="color:#8899aa;margin-bottom:12px;font-size:.85em"></p><div id="carryoverSummary" class="summary-text" style="display:none"></div><div style="display:flex;gap:8px;justify-content:center;margin-top:16px"><button class="btn" onclick="document.getElementById('carryoverModal').style.display='none'">取消</button><button class="btn btn-primary" onclick="confirmCarryover()">✅ 确认结转</button></div></div></div>
     <div class="modal-overlay" id="importPreviewModal" style="display:none"><div class="modal-box"><h3>📥 导入预览</h3><div id="importPreviewContent"></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn" onclick="document.getElementById('importPreviewModal').style.display='none'">取消</button><button class="btn btn-primary" id="importConfirmBtn" onclick="confirmImport()">✅ 确认导入</button></div></div></div>
@@ -1069,7 +1052,17 @@
 
         function loadData() {
             let raw = localStorage.getItem(STORAGE_KEY);
-            if (raw) { data = JSON.parse(raw) } else {
+            if (raw) {
+                try { data = JSON.parse(raw);
+                    if (!data.products || data.products.length === 0) throw new Error('空数据'); } catch (e) {
+                    data.products = PRODUCT_BASE.map((p, i) => ({ ...p, id: i + 1, initStock: INIT_STOCK[p.code] || 0,
+                        dailyIn: createDaily(), dailyOut: createDaily(), shipDays: 0 }));
+                    data.currentYear = 2026;
+                    data.currentMonth = 6;
+                    data.history = {};
+                    saveData()
+                }
+            } else {
                 data.products = PRODUCT_BASE.map((p, i) => ({ ...p, id: i + 1, initStock: INIT_STOCK[p.code] || 0,
                     dailyIn: createDaily(), dailyOut: createDaily(), shipDays: 0 }));
                 data.currentYear = 2026;
@@ -1079,7 +1072,8 @@
             }
         }
 
-        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)) }
+        function saveData() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)) } catch (e) { console.warn(
+                    '保存失败:', e) } }
 
         function calcStats(p) {
             let ti = 0,
@@ -1093,22 +1087,15 @@
             return { totalIn: ti, totalOut: to, shipDays: sd, realStock: rs, dailyUse: du, availDays: ad }
         }
 
-        // ===== 月度同比异常检测 =====
         function detectYoYAnomalies() {
             let alerts = [];
             let historyKeys = Object.keys(data.history).sort();
-            if (historyKeys.length === 0) {
-                return { alerts: [], hasData: false };
-            }
+            if (historyKeys.length === 0) { return { alerts: [], hasData: false } }
             let lastMonthKey = historyKeys[historyKeys.length - 1];
             let lastMonthData = data.history[lastMonthKey];
-            if (!lastMonthData || !lastMonthData.products) {
-                return { alerts: [], hasData: false };
-            }
-
+            if (!lastMonthData || !lastMonthData.products) { return { alerts: [], hasData: false } }
             let lastMonthMap = {};
-            lastMonthData.products.forEach(p => { lastMonthMap[p.code] = p; });
-
+            lastMonthData.products.forEach(p => { lastMonthMap[p.code] = p });
             data.products.forEach(p => {
                 let s = calcStats(p);
                 let lastP = lastMonthMap[p.code];
@@ -1116,31 +1103,21 @@
                 let lastS = calcStats(lastP);
                 if (lastS.totalOut === 0) return;
                 let change = ((s.totalOut - lastS.totalOut) / lastS.totalOut) * 100;
-                if (change > 50) {
-                    alerts.push({ product: p, change: change, type: 'up', current: s.totalOut, last: lastS
-                            .totalOut });
-                } else if (change < -50) {
-                    alerts.push({ product: p, change: change, type: 'down', current: s.totalOut, last: lastS
-                            .totalOut });
-                }
+                if (change > 50) { alerts.push({ product: p, change: change, type: 'up', current: s.totalOut,
+                        last: lastS.totalOut }) } else if (change < -50) { alerts.push({ product: p,
+                        change: change, type: 'down', current: s.totalOut, last: lastS.totalOut }) }
             });
             yoyAlerts = alerts;
-            return { alerts, hasData: true };
+            return { alerts, hasData: true }
         }
 
         function renderYoYAlerts() {
             let container = document.getElementById('yoyAlertContainer');
             let result = detectYoYAnomalies();
-            if (!result.hasData) {
-                container.innerHTML =
-                    `<div style="font-size:.78em;color:var(--text2);padding:4px 0">📊 月度同比：暂无上月数据，请先完成一次月度结转。</div>`;
-                return;
-            }
-            if (result.alerts.length === 0) {
-                container.innerHTML =
-                    `<div style="font-size:.78em;color:var(--green);padding:4px 0">✅ 月度同比：各产品出库量较上月无显著异常（±50%以内）</div>`;
-                return;
-            }
+            if (!result.hasData) { container.innerHTML =
+                    `<div style="font-size:.78em;color:var(--text2);padding:4px 0">📊 月度同比：暂无上月数据，请先完成一次月度结转。</div>`; return }
+            if (result.alerts.length === 0) { container.innerHTML =
+                    `<div style="font-size:.78em;color:var(--green);padding:4px 0">✅ 月度同比：各产品出库量较上月无显著异常（±50%以内）</div>`; return }
             let up = result.alerts.filter(a => a.type === 'up');
             let down = result.alerts.filter(a => a.type === 'down');
             let html =
@@ -1150,12 +1127,11 @@
 
         function showYoYDetail() {
             let content = document.getElementById('yoyDetailContent');
-            if (yoyAlerts.length === 0) { content.innerHTML = '<p style="color:var(--text2)">暂无异常记录</p>'; return; }
+            if (yoyAlerts.length === 0) { content.innerHTML = '<p style="color:var(--text2)">暂无异常记录</p>'; return }
             let html =
                 `<div class="preview-table"><table><thead><tr><th>产品</th><th>当月出库</th><th>上月出库</th><th>变化</th><th>状态</th></tr></thead><tbody>`;
             yoyAlerts.forEach(a => {
-                let status = a.type === 'up' ?
-                    '<span class="tag tag-danger">↑ 增长异常</span>' :
+                let status = a.type === 'up' ? '<span class="tag tag-danger">↑ 增长异常</span>' :
                     '<span class="tag tag-warn">↓ 下降异常</span>';
                 html +=
                     `<tr><td>${a.product.name}</td><td>${a.current}</td><td>${a.last}</td><td style="color:${a.type==='up'?'#ff6b6b':'#f0d878'};font-weight:700">${a.change > 0 ? '+':''}${a.change.toFixed(0)}%</td><td>${status}</td></tr>`;
@@ -1165,40 +1141,26 @@
             document.getElementById('yoyDetailModal').style.display = 'flex';
         }
 
-        // ===== 搜索跳转 =====
         function handleSearch(value) {
             let results = document.getElementById('searchResults');
             let clearBtn = document.getElementById('searchClear');
             let trimmed = value.trim();
-
-            if (!trimmed) {
-                results.style.display = 'none';
-                clearBtn.style.display = 'none';
-                return;
-            }
+            if (!trimmed) { results.style.display = 'none';
+                clearBtn.style.display = 'none'; return }
             clearBtn.style.display = 'inline';
-
-            let matches = data.products.filter(p =>
-                p.name.includes(trimmed) ||
-                p.spec.includes(trimmed) ||
-                p.code.includes(trimmed)
-            );
-
-            if (matches.length === 0) {
-                results.innerHTML = `<div class="item" style="color:var(--text2);cursor:default">无匹配产品</div>`;
-                results.style.display = 'block';
-                return;
-            }
-
+            let matches = data.products.filter(p => p.name.includes(trimmed) || p.spec.includes(trimmed) || p.code
+                .includes(trimmed));
+            if (matches.length === 0) { results.innerHTML =
+                    `<div class="item" style="color:var(--text2);cursor:default">无匹配产品</div>`;
+                results.style.display = 'block'; return }
             let html = '';
             matches.slice(0, 10).forEach(p => {
                 let s = calcStats(p);
                 html +=
                     `<div class="item" onclick="jumpToProduct(${p.id})">${p.name} <span class="code">${p.code}</span> <span style="color:var(--text2);font-size:.7em">库存 ${s.realStock}</span></div>`;
             });
-            if (matches.length > 10) {
-                html += `<div class="item" style="color:var(--text2);cursor:default">... 共 ${matches.length} 个结果</div>`;
-            }
+            if (matches.length > 10) { html +=
+                    `<div class="item" style="color:var(--text2);cursor:default">... 共 ${matches.length} 个结果</div>` }
             results.innerHTML = html;
             results.style.display = 'block';
         }
@@ -1238,7 +1200,6 @@
             document.getElementById('searchClear').style.display = 'none';
         }
 
-        // ===== 自动采购建议 =====
         function renderPurchaseSuggestions() {
             let container = document.getElementById('purchaseContainer');
             let suggestions = [];
@@ -1247,20 +1208,16 @@
                 let threshold = p.safeStock * 1.5;
                 if (s.realStock < threshold && s.dailyUse > 0) {
                     let urgent = s.realStock < p.safeStock;
-                    let suggestQty = Math.max(Math.ceil(p.safeStock * 2 - s.realStock), Math.ceil(s.dailyUse * 3));
+                    let suggestQty = Math.max(Math.ceil(p.safeStock * 2 - s.realStock), Math.ceil(s.dailyUse *
+                    3));
                     let daysLeft = s.dailyUse > 0 ? Math.floor(s.realStock / s.dailyUse) : 999;
                     suggestions.push({ product: p, stats: s, urgent, suggestQty, daysLeft, threshold });
                 }
             });
-            suggestions.sort((a, b) => a.stats.realStock / (a.product.safeStock || 1) - b.stats.realStock / (b.product
-                .safeStock || 1));
-
-            if (suggestions.length === 0) {
-                container.innerHTML =
-                    `<div style="font-size:.8em;color:var(--green);padding:4px 0">✅ 所有产品库存充足，暂无采购建议。</div>`;
-                return;
-            }
-
+            suggestions.sort((a, b) => a.stats.realStock / (a.product.safeStock || 1) - b.stats.realStock / (b
+                .product.safeStock || 1));
+            if (suggestions.length === 0) { container.innerHTML =
+                    `<div style="font-size:.8em;color:var(--green);padding:4px 0">✅ 所有产品库存充足，暂无采购建议。</div>`; return }
             let html =
                 `<div style="margin-bottom:12px;font-size:.8em;color:var(--gold);font-weight:600">🛒 采购建议 · 共 ${suggestions.length} 个产品需要关注</div><div class="purchase-grid">`;
             suggestions.forEach(item => {
@@ -1279,7 +1236,6 @@
             container.innerHTML = html;
         }
 
-        // ===== 异常波动报警 =====
         function detectAnomalies() {
             let alerts = [];
             let today = new Date().getDate();
@@ -1306,10 +1262,7 @@
         function renderAlerts() {
             let container = document.getElementById('alertBannerContainer');
             let alerts = detectAnomalies();
-            if (alerts.length === 0) {
-                container.innerHTML = '';
-                return;
-            }
+            if (alerts.length === 0) { container.innerHTML = ''; return }
             let uniqueDays = new Set(alerts.map(a => a.day));
             let html =
                 `<div class="alert-banner"><span class="label">⚠️ 异常波动报警</span><span class="detail">本月有 <strong>${uniqueDays.size}</strong> 个异常出库日（>日均2.5倍），涉及 <strong>${alerts.length}</strong> 条记录</span><button class="btn btn-sm btn-red" onclick="showAlertDetail()">查看详情</button></div>`;
@@ -1318,7 +1271,7 @@
 
         function showAlertDetail() {
             let content = document.getElementById('alertDetailContent');
-            if (detectedAlerts.length === 0) { content.innerHTML = '<p style="color:var(--text2)">暂无异常记录</p>'; return; }
+            if (detectedAlerts.length === 0) { content.innerHTML = '<p style="color:var(--text2)">暂无异常记录</p>'; return }
             let html =
                 `<div class="preview-table"><table><thead><tr><th>日期</th><th>产品</th><th>当日出库</th><th>日均</th><th>倍数</th></tr></thead><tbody>`;
             detectedAlerts.forEach(a => {
@@ -1330,7 +1283,6 @@
             document.getElementById('alertDetailModal').style.display = 'flex';
         }
 
-        // ===== 月度复盘摘要 =====
         function generateMonthlySummary() {
             let products = data.products;
             let topIn = [...products].sort((a, b) => calcStats(b).totalIn - calcStats(a).totalIn).slice(0, 3);
@@ -1342,7 +1294,6 @@
                     sB = calcStats(b);
                 return (sA.totalIn - sA.totalOut) - (sB.totalIn - sB.totalOut);
             }).slice(0, 3);
-
             let lines = [];
             lines.push(`📊 ${data.currentYear}年${data.currentMonth}月 复盘摘要`);
             lines.push('');
@@ -1356,13 +1307,13 @@
             let totalOut = products.reduce((sum, p) => sum + calcStats(p).totalOut, 0);
             let netChange = totalIn - totalOut;
             let totalStock = products.reduce((sum, p) => sum + calcStats(p).realStock, 0);
-            lines.push(`📦 总览：入库${totalIn}，出库${totalOut}，净${netChange > 0 ? '+' : ''}${netChange}，期末库存${totalStock}`);
+            lines.push(
+                `📦 总览：入库${totalIn}，出库${totalOut}，净${netChange > 0 ? '+' : ''}${netChange}，期末库存${totalStock}`);
             lines.push('');
             lines.push(`—— 婉玲自动生成 · ${new Date().toLocaleString()}`);
             return lines.join('\n');
         }
 
-        // ===== 检查月份 =====
         function checkMonthRollover() {
             let now = new Date();
             let currentYear = now.getFullYear();
@@ -1386,12 +1337,9 @@
                 document.getElementById('carryoverSummary').style.display = 'block';
                 document.getElementById('carryoverModal').style.display = 'flex';
                 window._rolloverTarget = { year: currentYear, month: currentMonth };
-            } else {
-                alert(msg || '当前月份无需结转。');
-            }
+            } else { alert(msg || '当前月份无需结转。') }
         }
 
-        // ===== 月度结转 =====
         function monthlyCarryover() {
             document.getElementById('carryoverMsg').textContent =
                 `即将把${data.currentYear}年${data.currentMonth}月的实时库存结转为下月盘点库存，本月数据自动存档至历史记录。`;
@@ -1407,22 +1355,17 @@
             let targetMonth = window._rolloverTarget ? window._rolloverTarget.month : data.currentMonth + 1;
             if (targetMonth > 12) { targetMonth = 1;
                 targetYear++ }
-
             let key = `${data.currentYear}年${data.currentMonth}月`;
             let snapshot = JSON.parse(JSON.stringify(data.products));
             let summary = generateMonthlySummary();
-
             data.history[key] = { products: snapshot, summary: summary };
-
             data.products.forEach(p => { let s = calcStats(p);
                 p.initStock = s.realStock;
                 p.dailyIn = createDaily();
                 p.dailyOut = createDaily();
                 p.shipDays = 0 });
-
             data.currentYear = targetYear;
             data.currentMonth = targetMonth;
-
             saveData();
             renderAll();
             document.getElementById('carryoverModal').style.display = 'none';
@@ -1431,7 +1374,6 @@
             alert(`结转完成！${key}数据已存档，已切换至 ${targetYear}年${targetMonth}月。\n\n${summary}`);
         }
 
-        // ===== 渲染历史记录 =====
         function renderHistoryList() {
             let container = document.getElementById('historyList');
             let keys = Object.keys(data.history).sort().reverse();
@@ -1447,15 +1389,10 @@
             if (!h) return;
             document.querySelectorAll('.history-chip').forEach(c => c.classList.remove('active'));
             event.target.classList.add('active');
-
             let summaryContainer = document.getElementById('historySummaryContainer');
-            if (h.summary) {
-                summaryContainer.innerHTML =
-                    `<div class="summary-text"><strong>📋 ${key} 复盘摘要</strong>\n${h.summary}</div>`;
-            } else {
-                summaryContainer.innerHTML = '';
-            }
-
+            if (h.summary) { summaryContainer.innerHTML =
+                    `<div class="summary-text"><strong>📋 ${key} 复盘摘要</strong>\n${h.summary}</div>` } else { summaryContainer
+                    .innerHTML = '' }
             let tb = document.getElementById('historyTbody');
             tb.innerHTML = h.products.map(p => { let s = calcStats(p);
                 return `<tr><td style="text-align:left;font-weight:600">${p.name}</td><td>${p.spec}</td><td>${p.code}</td><td>${p.initStock}</td><td>${p.safeStock}</td>` +
@@ -1464,7 +1401,6 @@
             }).join('');
         }
 
-        // ===== 基础渲染 =====
         function renderAll() {
             document.getElementById('monthBadge').textContent = `📅 ${data.currentYear}年${data.currentMonth}月`;
             renderStats();
@@ -1517,7 +1453,6 @@
             renderAll();
         }
 
-        // ===== 快速录入 =====
         function quickBatch() {
             let input = document.getElementById('quickInput').value.trim();
             let result = document.getElementById('quickResult');
@@ -1620,9 +1555,8 @@
             renderAll();
             if (matched > 0) {
                 result.textContent = `✅ 成功录入 ${matched} 条指令${errors.length > 0 ? '，'+errors.length+'条失败' : ''}`;
-            } else {
-                result.textContent = `❌ 未能识别任何指令。请尝试：产品名 入库/出库 数量，例如：全季6.5盎司 入库 50`;
-            }
+            } else { result.textContent =
+                    `❌ 未能识别任何指令。请尝试：产品名 入库/出库 数量，例如：全季6.5盎司 入库 50` }
             if (errors.length > 0) { console.warn('批量录入错误:', errors) }
         }
 
@@ -1821,7 +1755,6 @@
             renderAll()
         }
 
-        // ===== 导入导出 =====
         function exportExcel() {
             let rows = [
                 ['产品名称', '规格', '编码', '盘点库存', '安全线', '月入库', '月出库', '发货天数', '日均消耗', '实时库存', '可发天数',
@@ -2016,9 +1949,7 @@
                 saveData();
                 renderAll();
                 alert(`导入成功！更新了 ${updatedCount} 个日度数据。`);
-            } else {
-                alert('没有数据被更新');
-            }
+            } else { alert('没有数据被更新') }
             document.getElementById('importPreviewModal').style.display = 'none';
             pendingImportData = null;
         }
